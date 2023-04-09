@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'postmaker/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+  .normaltext{
+    
+    font-size: 2.9rem;
+    font-family:'Poppins', sans-serif; 
+    text-transform: uppercase;
+	  background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+	  -webkit-background-clip: text;
+	  -webkit-text-fill-color: transparent;
+    font-weight: bolder;
+  }
+
+  .smalltext{
+    color : white;
+    font-family:'Poppins', sans-serif; 
+    font-size: 1rem;
+  }
+
+  #inputbox{
+    border : 1px solid #330867;
+  }
+
+  #inputbox:hover{
+    border : 1px solid #30CFD0;
+  }
+
+  .image{
+    height: 60vh;
+    width:60vh;
+  }
+  .caption{
+    color: white;
+  }
+
+  .images{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .myprompt{
+    color : white;
+    font-family:'Poppins', sans-serif; 
+    font-size: 2rem;
+
+  }
+
+  .yourtext{
+    font-family:'Poppins', sans-serif; 
+    font-size: 2.5rem;
+    background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+	  -webkit-background-clip: text;
+	  -webkit-text-fill-color: transparent;
+  }
+
+  .Prompt{
+    display:flex;
+    flex-direction: column;
+  }
+
+ .hidden{
+  display: none;
+ }
+
+ .caption{
+  margin: 1rem;
+  border : 1px solid #30CFD0;
+  border-radius : 10px;
+  padding : 1rem;
+  font-size: 1.5rem;
+  font-family:'Poppins', sans-serif; 
+ }
+
+    </style>
+</head>
+<body style="background-color: black;"> 
+
+  <p class="normaltext text-center"> Text to Image with <br> AI Image Generator</p> 
+  <p class="smalltext text-center">Create a post with beautiful caption using AI <br>Input the prompt and convert your Imagination into reality</p>
+    <form  action="{% url 'collegeproject:generate' %}"" method="post">
+        {% csrf_token %}
+   <div  class="searchbox">
+   
+    <input id="inputbox" class="textImagebox" placeholder="Convert text to image" name="user_input"  />
+    <button   type="submit" class="btn btn-outline-info">Generate</button>
+   </div>
+    </form>
+    
+  
+  {% if image_data %}
+  <br>
+  <div class="deemag">
+  <div class="images">
+    <img class="image" src="{{image_data}}"  alt="image">
+    <div class="Prompt">
+      <p class="yourtext">Your Prompt :</p> 
+      <div class="myprompt text-center">{{prompt}}</div>
+    </div>
+    
+  </div>
+  <br>
+  <div class="textGenerate">
+    
+    <form   action="{% url 'collegeproject:textgenerate' %}"  method="POST" >
+      {% csrf_token %}
+      <div class="hidden">
+        <input  value="{{image_data}}" name="url"/>
+        <input  class="promptJs" name="prompt" />
+      </div>
+    <input id="inputbox" placeholder="Enter the keywords for Caption" name="text_input"  />
+    <button   type="submit" class="btn btn-outline-info">Generate</button>
+    
+    </form>
+    <div class="caption"> {{caption}} </div>
+  </div>
+</div>
+{% endif %}
+
+
+</body>
+<script>
+  var inputtext = "hellloo";
+  document.querySelector("#inputbox").addEventListener("keyup",()=>{
+    inputtext =  document.getElementById("inputbox").value;
+    console.log(inputtext);
+    console.log()
+}); 
+inputtext = document.querySelector(".textImagebox").value;
+if(document.querySelector(".deemag")){
+  console.log("deemag exist")
+  inputtext = document.querySelector(".myprompt").innerHTML;
+  document.querySelector(".promptJs").value = inputtext
+  console.log(inputtext)
+  // document.querySelector(".promptJs").value = inputtext
+}
+
+
+</script>
+
+</html>
